@@ -14,6 +14,7 @@ public class HttpHeadersHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        //获取web登录参数
         if (msg instanceof FullHttpRequest) {
             FullHttpRequest request = (FullHttpRequest) msg;
             UrlBuilder urlBuilder = UrlBuilder.ofHttp(request.uri());

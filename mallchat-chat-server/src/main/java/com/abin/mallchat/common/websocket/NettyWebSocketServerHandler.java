@@ -63,10 +63,12 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Tex
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
+            System.out.println("握手完成");
             IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
             // 读空闲
             if (idleStateEvent.state() == IdleState.READER_IDLE) {
                 // 关闭用户的连接
+                // 用户下线
                 userOffLine(ctx);
             }
         } else if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
@@ -90,11 +92,14 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Tex
         return SpringUtil.getBean(WebSocketService.class);
     }
 
-    // 读取客户端发送的请求报文
+    // 读取客户端发送的请求报文并处理
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
+        //反序列化请求报文
         WSBaseReq wsBaseReq = JSONUtil.toBean(msg.text(), WSBaseReq.class);
+        //解析type
         WSReqTypeEnum wsReqTypeEnum = WSReqTypeEnum.of(wsBaseReq.getType());
+        //根据type做不同的处理
         switch (wsReqTypeEnum) {
             case LOGIN:
                 this.webSocketService.handleLoginReq(ctx.channel());
