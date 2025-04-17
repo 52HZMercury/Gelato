@@ -15,6 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * Description: 微信api交互接口
+ * 需要微信公众号配置，暂时没有账号密码登录
  * Author: <a href="https://github.com/zongzibinbin">abin</a>
  * Date: 2023-03-19
  */
